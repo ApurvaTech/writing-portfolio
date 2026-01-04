@@ -1,0 +1,121 @@
+# How to Generate and Secure API Keys for a SaaS Application
+
+
+## Overview
+
+API keys are one of the important concepts when it comes to authenticating the user and play a critical role in how SaaS applications control access to their resources. This guide walks you through the fundamentals of generating the API keys and how you can secure them in the real world.
+
+Beginning with the fundamentals, you will discover what API keys are, why they are necessary, and how they are usually created. To help you safeguard API keys from abuse, leaks, or unauthorized access, the guide also offers doable solutions and tried-and-true best practices.
+
+
+## Audience
+
+This guide is typically intended for:
+
+
+
+* Onboarding developer integrating with the SaaS application.
+* System Admin trying to access API.
+* Technical audiences with basic knowledge of APIs
+
+
+## Prerequisites
+
+What is an API key?
+
+In simple terms, an API key is a secret code through which a machine identifies you and lets you use the API. It consists of unique letters and numbers that act as a special ID. You can consider it as a digital password through which you will be granted access to specific resources.
+
+
+## Steps to generate and secure an API key:
+
+
+
+1. Sign in to your SaaS application.
+2. Go to **Settings > Developer Settings > API Keys**.
+3. Click **Generate New API Key**.
+4. Fill in the following details:
+    1. Key name: Give a descriptive name.
+    2. Permissions: Select the permission level as per your need.
+5. Click **Generate**.
+
+**Note: Please make sure you copy the API key immediately and store it securely.**
+
+
+
+1. Store the API key securely.
+
+**Important: Never hardcode API keys directly into source code.**
+
+
+
+1. Include the API key in the **authorization **header of each API request.
+
+For example: 
+
+GET /v1/users 
+
+Host:[ api.example.com](http://api.example.com)
+
+Authorization: Bearer &lt;your-API-Key>
+
+**Note: Make sure that the request returns a 200 OK status; if you are getting a 401 Unauthorized status, that means your API key is not working. Repeat the steps to make it work correctly.**
+
+
+## Best Practices
+
+To secure your API key, there are some industry-standard best practices through which you can reduce the risk of key exposure.
+
+
+
+* When applying permissions to the key, always make sure that you provide the minimum required scope. Avoid full-access keys until absolutely necessary.
+* Make sure that the key is regenerated every 30-60 days.
+* Keep a close eye on the logs for unusual activity. Set alerts for high request volume or multiple failed attempts.
+* Try to separate the keys for different sets of requirements, such as development, production, testing, and staging.
+
+But sometimes the key is compromised. What to do in this situation?
+
+
+## Regenerate Compromised Key
+
+As soon as you realize that your key is compromised, make sure you follow the steps given below:
+
+
+
+1. Immediately revoke the compromised key.
+2. Generate the new API key.
+3. Review the logs for suspicious activity.
+
+
+## Common Errors
+
+Error: 401 Unauthorized 
+
+Because
+
+
+
+* Missing or invalid API key.
+* Incorrect header format.
+
+Fix
+
+
+
+* Verify your API key is correct.
+* Ensure the authorization bearer header is correctly set.
+
+Error: 403 Forbidden
+
+Causes
+
+
+
+* Permission issues.
+* Access restricted by IP.
+
+Fix
+
+
+
+* Review the permission granted to the key.
+* Verify the network restrictions.
