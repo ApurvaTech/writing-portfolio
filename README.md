@@ -22,7 +22,7 @@ Technical Writer with 5 years of experience creating developer-focused documenta
 ## Portfolio
 
 ### Links
-[How to Generate ans Secure API Keys for a SaaS Application](https://github.com/ApurvaTech/writing-portfolio/blob/main/How%20to%20Generate%20ans%20Secure%20API%20Keys%20for%20a%20SaaS%20Application)
+[How to Generate and Secure API Keys for a SaaS Application](https://github.com/ApurvaTech/writing-portfolio/blob/main/How%20to%20Generate%20ans%20Secure%20API%20Keys%20for%20a%20SaaS%20Application)
 
 ## Tools and Workflow
 
