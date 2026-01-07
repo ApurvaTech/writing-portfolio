@@ -1,0 +1,268 @@
+# **Create Data Export Job API**
+
+Creates an export job to download system data in a specified format.
+
+
+### **Endpoint**
+
+
+```
+POST /v2/exports
+```
+
+
+
+### **Description**
+
+
+This endpoint starts an asynchronous data export job and returns a job ID. You can use this ID to check the job's progress and download the exported file once it's ready.
+
+
+
+
+### **Authentication**
+
+This endpoint requires **API key authentication**.
+
+
+```
+Authorization: Bearer <API_KEY>
+```
+
+
+
+### **Request Headers**
+
+
+<table>
+  <tr>
+   <td><strong>Header</strong>
+   </td>
+   <td><strong>Type</strong>
+   </td>
+   <td><strong>Required</strong>
+   </td>
+   <td><strong>Description</strong>
+   </td>
+  </tr>
+  <tr>
+   <td><code>Authorization</code>
+   </td>
+   <td><code>String</code>
+   </td>
+   <td>Yes
+   </td>
+   <td>Bearer API key
+   </td>
+  </tr>
+  <tr>
+   <td><code>Content-Type</code>
+   </td>
+   <td><code>String</code>
+   </td>
+   <td>Yes
+   </td>
+   <td><code>application/json</code>
+   </td>
+  </tr>
+</table>
+
+
+
+### **Request Body Parameters**
+
+
+<table>
+  <tr>
+   <td><strong>Field</strong>
+   </td>
+   <td><strong>Type</strong>
+   </td>
+   <td><strong>Required</strong>
+   </td>
+   <td><strong>Description</strong>
+   </td>
+  </tr>
+  <tr>
+   <td><code>resource</code>
+   </td>
+   <td>string
+   </td>
+   <td>Yes
+   </td>
+   <td>Data entity to export (for example, <code>users</code>, <code>transactions</code>)
+   </td>
+  </tr>
+  <tr>
+   <td><code>format</code>
+   </td>
+   <td>string
+   </td>
+   <td>Yes
+   </td>
+   <td>Export format (<code>csv</code>, <code>json</code>)
+   </td>
+  </tr>
+  <tr>
+   <td><code>filters</code>
+   </td>
+   <td>object
+   </td>
+   <td>No
+   </td>
+   <td>Server-side filters applied before export
+   </td>
+  </tr>
+  <tr>
+   <td><code>fields</code>
+   </td>
+   <td>array
+   </td>
+   <td>No
+   </td>
+   <td>List of fields to include
+   </td>
+  </tr>
+  <tr>
+   <td><code>filters.fromDate</code>
+   </td>
+   <td>string
+   </td>
+   <td>No
+   </td>
+   <td>Start date in ISO 8601 format
+   </td>
+  </tr>
+  <tr>
+   <td><code>filters.toDate</code>
+   </td>
+   <td>String
+   </td>
+   <td>No
+   </td>
+   <td>End date in ISO 8601 format
+   </td>
+  </tr>
+</table>
+
+
+
+### **Example Request**
+
+
+```
+POST /v2/exports HTTP/1.1
+Host: api.example.com
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+{
+  "resource": "transactions",
+  "format": "csv",
+  "filters": {
+"fromDate": "2025-01-01",
+      "toDate": "2025-01-31"
+
+  },
+  "fields": ["id", "amount", "currency", "created_at"],
+  }
+```
+
+
+
+### **Response**
+
+Success Response (202 Accepted)
+
+
+```
+{
+  "export_id": "exp_93ab72e4",
+  "status": "queued",
+  "created_at": "2026-01-03T10:42:11Z"
+}
+```
+
+
+
+### **Response Fields**
+
+
+<table>
+  <tr>
+   <td><strong>Field</strong>
+   </td>
+   <td><strong>Type</strong>
+   </td>
+   <td><strong>Description</strong>
+   </td>
+  </tr>
+  <tr>
+   <td><code>export_id</code>
+   </td>
+   <td>string
+   </td>
+   <td>Unique identifier for the export job
+   </td>
+  </tr>
+  <tr>
+   <td><code>status</code>
+   </td>
+   <td>string
+   </td>
+   <td>Initial job status (<code>queued</code>)
+   </td>
+  </tr>
+  <tr>
+   <td><code>created_at</code>
+   </td>
+   <td>string
+   </td>
+   <td>ISO 8601 timestamp
+   </td>
+  </tr>
+</table>
+
+
+
+### **Error Handling**
+
+**Invalid Resource (400 Bad Request)**
+
+
+```
+{
+  "error": "invalid_resource",
+  "message": "The specified resource is not exportable."
+}
+```
+
+
+**Unauthorized (401)**
+```
+{
+  "error": "Unauthorized access"
+}
+```
+
+**Server Error (500 Internal Server Error)**
+```
+{
+  "error": "Failed to create export"
+}
+```
+**Rate Limit Exceeded (429 Too Many Requests)**
+
+
+```
+{
+  "error": "rate_limit_exceeded",
+  "retry_after": 60
+}
+```
+## Notes
+
+Export jobs are processed <strong>asynchronously</strong>.
+* Use the returned <code>exportId</code> to: 
+    * Check export <code>status</code>
+    * Download the exported file once completed
+* Large exports may take additional processing time.
